@@ -6,9 +6,9 @@
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Drangon-Li/Guzi-Assistant.git"
+    "url": "https://github.com/holamochi/Guzi-Assistant.git"
   },
-  "homepage": "https://github.com/Drangon-Li/Guzi-Assistant",
+  "homepage": "https://github.com/holamochi/Guzi-Assistant",
   "main": "out/main/index.js",
   "private": true,
   "engines": {

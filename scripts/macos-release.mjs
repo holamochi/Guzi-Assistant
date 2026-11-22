@@ -4,14 +4,19 @@ import { createReadStream } from 'node:fs'
 import { readFile, readdir, writeFile } from 'node:fs/promises'
 import { isAbsolute, basename, join } from 'node:path'
 
-export const sourceRepository = 'Drangon-Li/Guzi-Assistant'
+export const sourceRepository = 'holamochi/Guzi-Assistant'
 /** 源码仓库公开后，安装包与 Sparkle 更新源直接发布在源码仓库的 Releases 里，不再另设发布仓库。 */
 export const releaseRepository = sourceRepository
 /**
  * v0.13.0–v0.14.0 发布在这里，这些安装包写死从它读更新源。迁移版本发布时用 --bridge-legacy
  * 在这里放一份指向新仓库安装包的更新源，老用户升到迁移版本后就改读新仓库；之后本仓库归档即可。
  */
-export const legacyReleaseRepository = 'Drangon-Li/guzi-assistant-releases'
+export const legacyReleaseRepository = 'holamochi/guzi-assistant-releases'
+/**
+ * 账号从 Drangon-Li 改名为 holamochi 之前发布的版本（v0.16.0 及更早），provenance 里记的是旧名字。
+ * 只在校验「上一个正式版」时当作同一个仓库接受；新版本一律写新名字。
+ */
+export const formerRepositoryNames = ['Drangon-Li/Guzi-Assistant', 'Drangon-Li/guzi-assistant-releases']
 export const stableAppId = 'cn.shilong.gooz'
 export const stableFeed = `https://github.com/${releaseRepository}/releases/latest/download/appcast-mac-arm64.xml`
 export const legacyStableFeed = `https://github.com/${legacyReleaseRepository}/releases/latest/download/appcast-mac-arm64.xml`
@@ -110,8 +115,8 @@ export function validateStableContinuity(previous, current) {
   }
   validate(current, [releaseRepository])
   if (!previous) return 'first-release'
-  // 迁移版本的上一个正式版还在旧发布仓库：签名密钥与版本递增照样要连续
-  validate(previous, [releaseRepository, legacyReleaseRepository])
+  // 迁移版本的上一个正式版还在旧发布仓库：签名密钥与版本递增照样要连续；账号改名前的记录按旧名字接受
+  validate(previous, [releaseRepository, legacyReleaseRepository, ...formerRepositoryNames])
   assert.equal(current.publicKey, previous.publicKey, 'Stable signing key changes require a dedicated key migration; automatic publication is blocked')
   const before = previous.version.split('.').map(BigInt)
   const after = current.version.split('.').map(BigInt)

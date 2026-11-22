@@ -18,7 +18,7 @@
 | 原始身份与创建时验证记录 | [macos-signing-identity.json](macos-signing-identity.json) |
 | 应用内置公钥 | [../scripts/sparkle-public-key.txt](../scripts/sparkle-public-key.txt) |
 | 私钥在登录钥匙串中的账户 | `cn.shilong.gooz.sparkle.production.v1` |
-| 源码仓库的 Actions Secret | `Drangon-Li/Guzi-Assistant` → `SPARKLE_PRIVATE_KEY` |
+| 源码仓库的 Actions Secret | `holamochi/Guzi-Assistant` → `SPARKLE_PRIVATE_KEY` |
 | 同一仓库的 Actions Variable | `SPARKLE_PUBLIC_KEY` |
 
 正式公钥保持不变：
@@ -159,7 +159,7 @@ build/sparkle/bin/generate_keys --account cn.shilong.gooz.sparkle.production.v1 
   fi
 
   # 仅在需要重建源码仓库 Secret 时，执行前取消下一行注释。
-  # gh secret set SPARKLE_PRIVATE_KEY --repo Drangon-Li/Guzi-Assistant < "$guzi_recovery_dir/private-key"
+  # gh secret set SPARKLE_PRIVATE_KEY --repo holamochi/Guzi-Assistant < "$guzi_recovery_dir/private-key"
 
   printf '%s\n' '本机密钥恢复、公钥核对、签名验签及篡改拒绝通过。临时明文将在退出时删除。'
 )
@@ -175,7 +175,7 @@ build/sparkle/bin/generate_keys --account cn.shilong.gooz.sparkle.production.v1 
 
 已有 GitHub Actions Secret 不受换机影响，本次恢复也未修改它。若日后确实执行了第 4 节可选命令重建 `SPARKLE_PRIVATE_KEY`：
 
-1. 在[源码仓库 Actions 设置](https://github.com/Drangon-Li/Guzi-Assistant/settings/secrets/actions)确认名称及更新时间。GitHub 不提供原值回读，不能把 Secret 当作可下载的备份。
+1. 在[源码仓库 Actions 设置](https://github.com/holamochi/Guzi-Assistant/settings/secrets/actions)确认名称及更新时间。GitHub 不提供原值回读，不能把 Secret 当作可下载的备份。
 2. 确认 Actions Variable `SPARKLE_PUBLIC_KEY` 与第 1 节及仓库公钥文件一致。它只能保存公开公钥。
 3. `RELEASE_REPO_TOKEN` 只用于把旧发布仓库 `guzi-assistant-releases` 的更新源桥接到源码仓库（一次性迁移），与签名身份无关，无需因此重建；旧仓库归档后即可删除。私钥 Secret 只配置在源码仓库，不能上传为 Release 附件，也不会暴露给外部 PR 触发的工作流。
 4. 下一次发版先完成现有草稿构建、签名校验和升级测试，再正式发布。上述换机命令不会推送代码或发布版本。

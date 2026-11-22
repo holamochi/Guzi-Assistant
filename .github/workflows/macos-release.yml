@@ -83,7 +83,7 @@ jobs:
             node scripts/build-macos-release.mjs --channel test --skip-build \
               --app-id "cn.shilong.gooz.update-test.ci-${GITHUB_RUN_ID}" \
               --profile-dir "/private/tmp/guzi-update-ci-${GITHUB_RUN_ID}" \
-              --feed-url "https://github.com/Drangon-Li/Guzi-Assistant/releases/download/${RELEASE_TAG}-test-${GITHUB_RUN_ID}/appcast-mac-arm64.xml"
+              --feed-url "https://github.com/${GITHUB_REPOSITORY}/releases/download/${RELEASE_TAG}-test-${GITHUB_RUN_ID}/appcast-mac-arm64.xml"
           fi
       - name: Verify archives and sign Sparkle update
         run: node scripts/sign-macos-release.mjs --channel "$CHANNEL"

@@ -6,7 +6,7 @@ import { join } from 'node:path'
 const root = fileURLToPath(new URL('../', import.meta.url))
 const { version } = JSON.parse(await readFile(join(root, 'package.json'), 'utf8'))
 const filename = `GuziAssistant-${version}-win-x64.exe`
-const base = process.env.GUZI_ASSISTANT_WINDOWS_DOWNLOAD_BASE_URL || `https://github.com/Drangon-Li/Guzi-Assistant/releases/download/v${version}/`
+const base = process.env.GUZI_ASSISTANT_WINDOWS_DOWNLOAD_BASE_URL || `https://github.com/holamochi/Guzi-Assistant/releases/download/v${version}/`
 const download = new URL(filename, base.endsWith('/') ? base : `${base}/`)
 if (download.protocol !== 'https:' || download.username || download.password) throw new Error('Windows download base URL must use HTTPS without credentials')
 const sums = []
