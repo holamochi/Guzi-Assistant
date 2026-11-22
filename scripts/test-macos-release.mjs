@@ -7,7 +7,7 @@ import { basename, join } from 'node:path'
 import { test } from 'node:test'
 import { createRequire } from 'node:module'
 import { buildConfig } from './build-macos-release.mjs'
-import { bridgeLegacyFeed, checksumName, feedName, legacyReleaseRepository, provenanceName, releaseElectronVersion, readGitHubReleaseByTag, readOptionalGitHubRelease, releaseRepository, sha256, sourceRepository, stableAppId, stableFeed, validateExistingDraft, validateStableContinuity, validateTag, validateUpdateConfig, verifySignature } from './macos-release.mjs'
+import { bridgeLegacyFeed, checksumName, feedName, formerRepositoryNames, legacyReleaseRepository, provenanceName, releaseElectronVersion, readGitHubReleaseByTag, readOptionalGitHubRelease, releaseRepository, sha256, sourceRepository, stableAppId, stableFeed, validateExistingDraft, validateStableContinuity, validateTag, validateUpdateConfig, verifySignature } from './macos-release.mjs'
 import { verifyRelease } from './verify-macos-release.mjs'
 
 const keys = generateKeyPairSync('ed25519')
@@ -90,6 +90,15 @@ test('the migration release continues from the legacy release repository and now
   assert.throws(() => validateStableContinuity({ ...legacy, repository: 'someone/else' }, next), /Unexpected release repository/)
   assert.throws(() => validateStableContinuity(next, { ...next, repository: legacyReleaseRepository, version: '0.16.0', releaseTag: 'v0.16.0' }), /Unexpected release repository/)
   assert.throws(() => validateStableContinuity(legacy, { ...next, version: '0.14.0', releaseTag: 'v0.14.0' }), /rollback requires repackaging/)
+})
+
+test('releases published before the account rename still count as the previous stable release', () => {
+  assert.equal(releaseRepository, 'holamochi/Guzi-Assistant')
+  const next = { ...stable, version: '0.17.0', releaseTag: 'v0.17.0' }
+  for (const repository of formerRepositoryNames) {
+    assert.equal(validateStableContinuity({ ...stable, repository, version: '0.16.0', releaseTag: 'v0.16.0' }, next), 'upgrade')
+    assert.throws(() => validateStableContinuity(next, { ...next, repository, version: '0.18.0', releaseTag: 'v0.18.0' }), /Unexpected release repository/)
+  }
 })
 
 test('only an explicit GitHub HTTP 404 indicates an absent stable release', () => {

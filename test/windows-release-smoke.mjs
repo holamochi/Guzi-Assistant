@@ -8,7 +8,7 @@ import { fileURLToPath } from 'node:url'
 import { verifyWindowsRelease } from '../scripts/verify-windows-release.mjs'
 
 const root = await mkdtemp(join(tmpdir(), 'guzi-release-'))
-const repository = 'Drangon-Li/Guzi-Assistant'
+const repository = 'holamochi/Guzi-Assistant'
 const version = '0.12.0'
 const tag = `v${version}`
 const event = { action: 'published', repository: { full_name: repository }, release: { tag_name: tag, draft: false, prerelease: false } }
